@@ -215,16 +215,20 @@ controller.uploadProfilePic = async (req: any, res: Response): Promise<void> => 
   // }
 
   try {
-    const userId = req.userId;
-    const blockBlobClient = containerClient.getBlockBlobClient(userId);
+    const prop = await containerClient.getProperties();
+    console.log(prop);
 
-    const textContent = 'Hello, Azure Storage! This is a text file created programmatically 2.';
-    const data = Uint8Array.from(Buffer.from(textContent, 'utf8'));
-    const uploadResponse = await blockBlobClient.upload(data, data.length);
-    console.log('Sucess :' + uploadResponse);
+    const imageFile = req.file;
+    const blockBlobClient = containerClient.getBlockBlobClient(req.userId);
+    await blockBlobClient.uploadData(imageFile.buffer, { blobHTTPHeaders: { blobContentType: imageFile.mimetype } });
+
+    // const imageFile = req.file;
+    // await blockBlobClient.uploadData(imageFile.buffer, { blobHTTPHeaders: { blobContentType: imageFile.mimetype } });
     res.status(200).send('PFP funciona');
+
   } catch (err) {
     console.error(err);
+    res.status(500).send('Algo falló');
   }
 
 };
