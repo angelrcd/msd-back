@@ -64,6 +64,7 @@ controller.getDataByDay = async (req: any, res: Response) => {
   }
   try {
     const data = await getDataByDay(userId, day, dataRepository);
+
     if (data === 'Invalid Date, please enter a valid date'){
       res.status(400).send(data);
       return;

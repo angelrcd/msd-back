@@ -52,6 +52,7 @@ export const getDataByDay = async (userId: string, day: Date, repository: SleepD
     return ('Invalid Date, please enter a valid date');
   }
   const data = await repository.getByDay(userId, dayDateFormat);
+  
   if (data.length === 0){
     return 'This user has no registered data for this day, please enter sleep data';
   }
