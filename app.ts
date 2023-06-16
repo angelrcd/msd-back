@@ -12,6 +12,7 @@ import usersRoutes from './src/routes/user';
 import sleepDataRoutes from './src/routes/sleepData';
 import startDatabase from './src/connection';
 import { validateAuthUser } from './src/middlewares/validateAuthUser';
+import { BlobServiceClient } from '@azure/storage-blob';
 
 dotenv.config();
 
@@ -47,6 +48,8 @@ const configureExpress = async (): Promise<void> => {
   return;
 };
 
+const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.STORAGE_CONNECTION_STRING || '');
+export const containerClient = blobServiceClient.getContainerClient(process.env.STORAGE_CONTAINER_NAME || '');
 
 const startAplication = async (): Promise<void> => {
   await startDatabase();

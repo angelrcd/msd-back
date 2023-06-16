@@ -11,6 +11,7 @@ import { filterUser } from '../helpers/filterUser';
 import { generateJWT } from '../helpers/generateJWT';
 import { PasswordBcrypt } from '../helpers/PasswordBcrypt';
 import { SleepDataRepositoryMongo } from '../repository/sleepDataRepository';
+import { containerClient } from '../../app';
 
 
 const controller: any = {}; //He puesto any porque si no me decia que "getUsers property does not exist on type {}" , habria que poner una interfaz
@@ -176,6 +177,56 @@ controller.updateById = async (req: any, res: Response): Promise<void> => {
   } catch (err) {
     res.status(500).send('Error updating user');
   }
+};
+
+controller.uploadProfilePic = async (req: any, res: Response): Promise<void> => {
+  // const userRepository = new UserRepositoryMongo();
+
+  // const userId = req.userId;
+
+  // if (!userId || !isValidId(userId)){
+  //   res.status(400).send('Invalid user ID');
+  //   return;
+  // }
+
+  // const filter: UpdateFilter = {
+  //   '_id': userId
+  // };
+
+  // const data = req.body;
+
+  // console.log(data);
+
+  // try {
+  //   const updatedUser = await updateUser(filter, data, userRepository);
+    
+  //   if (updatedUser == 'User not found') {
+  //     res.status(400).send('User not found');
+  //     return;
+  //   } else if (updatedUser == 'Id can\'t be updated'){
+  //     res.status(400).send('Id can\'t be updated');
+  //     return;
+  //   } else {   
+  //     res.status(200).send('Ok');
+  //     return;
+  //   }
+  // } catch (err) {
+  //   res.status(500).send('Error updating user');
+  // }
+
+  try {
+    const userId = req.userId;
+    const blockBlobClient = containerClient.getBlockBlobClient(userId);
+
+    const textContent = 'Hello, Azure Storage! This is a text file created programmatically 2.';
+    const data = Uint8Array.from(Buffer.from(textContent, 'utf8'));
+    const uploadResponse = await blockBlobClient.upload(data, data.length);
+    console.log('Sucess :' + uploadResponse);
+    res.status(200).send('PFP funciona');
+  } catch (err) {
+    console.error(err);
+  }
+
 };
 
 export default controller;

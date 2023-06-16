@@ -16,4 +16,5 @@ router.post('/add', userController.add);
 
 router.patch('/myUser', [validateAuthUser], userController.updateById);
 router.delete('/myUser', [validateAuthUser], userController.deleteById);
+router.put('/pfp', [validateAuthUser], userController.uploadProfilePic);
 export default router;
