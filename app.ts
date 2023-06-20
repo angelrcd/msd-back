@@ -27,6 +27,20 @@ const corsOptions: cors.CorsOptions = {
 
 const app = express();
 
+const logsFolderPath = './logs';
+const logFilePath = './logs/app.log';
+
+if (!fs.existsSync(logsFolderPath)) {
+  fs.mkdirSync(logsFolderPath, { recursive: true });
+  console.log('Folder created successfully.');
+}
+
+// Check if the file exists, and create it if it doesn't
+if (!fs.existsSync(logFilePath)) {
+  fs.writeFileSync(logFilePath, '', 'utf8');
+  console.log('File created successfully.');
+}
+
 const configureExpress = async (): Promise<void> => {
   app.use(morgan('combined', {
     stream: fs.createWriteStream(path.join(__dirname, 'logs/app.log'), { flags: 'a' })
@@ -47,6 +61,12 @@ const configureExpress = async (): Promise<void> => {
   app.use('/data', sleepDataRoutes);
   return;
 };
+
+app.get('/test', (req, res) => {
+  res.status(200).send({
+    'Mongo': process.env.MONGO_IP
+  });
+});
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.STORAGE_CONNECTION_STRING || '');
 export const containerClient = blobServiceClient.getContainerClient(process.env.STORAGE_CONTAINER_NAME || '');
