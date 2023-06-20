@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
-    "build": "tsc",
-    "prod": "npm run build && node ./dist/app.js",
+    "build": "tsc && mkdir ./dist/logs && touch ./dist/logs/app.log",
+    "prod": "npm run build  && node ./dist/app.js",
     "start": "ts-node ./app.ts"
   },
   "dependencies": {
