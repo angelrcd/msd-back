@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-
+require('dotenv').config();
 const JWT_KEY = process.env.SECRET_OR_PRIVATE_KEY || undefined;
 
 
