@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
@@ -14,7 +13,7 @@ import startDatabase from './src/connection';
 import { validateAuthUser } from './src/middlewares/validateAuthUser';
 import { BlobServiceClient } from '@azure/storage-blob';
 
-dotenv.config();
+require('dotenv').config();
 
 const corsOptions: cors.CorsOptions = {
   origin: process.env.ALLOW_ORIGIN,
